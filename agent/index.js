@@ -162,15 +162,25 @@ async function run() {
   const contract = getContract(signer);
 
   const onchainAddress = await signer.getAddress();
-  const gasBal = await provider.getBalance(onchainAddress);
+  const balanceAddress = (process.env.AGENT_WALLET_ADDRESS && ethers.isAddress(process.env.AGENT_WALLET_ADDRESS))
+    ? process.env.AGENT_WALLET_ADDRESS
+    : onchainAddress;
+  const gasBal = await provider.getBalance(balanceAddress);
 
   log("info", "Planet Agent is online. Watching for open wagers on Base Mainnet...", {
     wallet: onchainAddress,
+    balanceWallet: balanceAddress,
     contract: process.env.CONTRACT_ADDRESS,
     pollMs: POLL_MS,
     maxIterations: MAX_ITERATIONS,
     gasBalanceWei: gasBal.toString(),
   });
+
+  if (gasBal === 0n) {
+    log("info", "⚠️ Gas balance is zero. Claims cannot be submitted until wallet is funded with ETH for gas.", {
+      balanceWallet: balanceAddress,
+    });
+  }
 
   if (process.env.AGENT_WALLET_ADDRESS && ethers.isAddress(process.env.AGENT_WALLET_ADDRESS)) {
     if (onchainAddress.toLowerCase() !== process.env.AGENT_WALLET_ADDRESS.toLowerCase()) {

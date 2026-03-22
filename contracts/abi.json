@@ -77,13 +77,12 @@
   {
     "type": "event",
     "name": "WagerCreated",
-    "anonymous": false,
     "inputs": [
-      { "indexed": true, "name": "wagerId", "type": "uint256" },
-      { "indexed": true, "name": "player1", "type": "address" },
-      { "indexed": false, "name": "amount", "type": "uint256" },
-      { "indexed": false, "name": "gameKey", "type": "bytes32" },
-      { "indexed": false, "name": "matchId", "type": "bytes32" }
+      { "name": "wagerId", "type": "uint256", "indexed": true },
+      { "name": "matchId", "type": "bytes32", "indexed": true },
+      { "name": "player1", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "gameKey", "type": "bytes32", "indexed": false }
     ]
   },
   {

@@ -23,25 +23,38 @@ function bytes32ToText(value) {
   }
 }
 
-async function getWagerDetails(wagerId, contractInstance) {
+async function getWagerDetails(wagerId, contractInstance, eventMeta = {}) {
   try {
     const provider = getProvider();
     const contract = contractInstance || getContract(provider);
     const wager = await contract.wagers(wagerId);
 
+    // Support both named and positional struct outputs
+    const player1 = wager.player1 ?? wager[0];
+    const player2 = wager.player2 ?? wager[1];
+    const amountRaw = wager.amount ?? wager[2];
+    const gameKey = wager.gameKey ?? wager[3];
+    const matchIdOnchain = wager.matchId ?? wager[4];
+    const claimed = wager.claimed ?? wager[5];
+    const cancelled = wager.cancelled ?? wager[6];
+    const createdAt = wager.createdAt ?? wager[7];
+
+    const finalMatchId = eventMeta.matchId || matchIdOnchain;
+
     return {
       wagerId: wagerId.toString(),
-      player1: wager.player1,
-      player2: wager.player2,
-      amount: ethers.formatUnits(wager.amount, 6),
-      amountRaw: wager.amount.toString(),
-      gameKey: wager.gameKey,
-      gameKeyText: bytes32ToText(wager.gameKey),
-      matchId: wager.matchId,
-      matchIdText: bytes32ToText(wager.matchId),
-      claimed: wager.claimed,
-      cancelled: wager.cancelled,
-      createdAt: wager.createdAt?.toString?.() || String(wager.createdAt || ""),
+      player1,
+      player2,
+      amount: ethers.formatUnits(amountRaw, 6),
+      amountRaw: amountRaw.toString(),
+      gameKey,
+      gameKeyText: bytes32ToText(gameKey),
+      matchId: finalMatchId,
+      matchIdText: bytes32ToText(finalMatchId),
+      claimed: Boolean(claimed),
+      cancelled: Boolean(cancelled),
+      createdAt: createdAt?.toString?.() || String(createdAt || ""),
+      eventPlayer1: eventMeta.player1,
     };
   } catch (err) {
     log("error", `Failed to read wager ${wagerId}`, { error: err.message });
@@ -81,16 +94,13 @@ async function getOpenWagers() {
 
   for (const eventLog of eventLogs) {
     try {
-      const parsed = contract.interface.parseLog(eventLog);
-      const wagerId = parsed.args[0];
-      const matchId = parsed.args[1];
-      const wager = await getWagerDetails(wagerId, contract);
+      // Decode manually using verified on-chain event signature
+      // WagerCreated(uint256 indexed wagerId, bytes32 indexed matchId, address indexed player1, uint256 amount, bytes32 gameKey)
+      const wagerId = BigInt(eventLog.topics[1]);
+      const matchId = eventLog.topics[2];
+      const player1 = "0x" + eventLog.topics[3].slice(26);
 
-      if (wager) {
-        wager.matchId = matchId.toString();
-        wager.matchIdText = wager.matchId;
-      }
-
+      const wager = await getWagerDetails(wagerId, contract, { matchId, player1 });
       if (isOpen(wager)) openWagers.push(wager);
     } catch (err) {
       log("error", "Failed to parse wager event", { error: err.message });

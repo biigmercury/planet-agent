@@ -27,14 +27,23 @@ async function safeJson(res) {
   }
 }
 
+function bytes32ToUuid(matchId) {
+  const raw = String(matchId || "").trim().replace(/^0x/, "").toLowerCase();
+  if (!raw) return "";
+  const slice = raw.slice(0, 32).padEnd(32, "0");
+  return `${slice.slice(0, 8)}-${slice.slice(8, 12)}-${slice.slice(12, 16)}-${slice.slice(16, 20)}-${slice.slice(20, 32)}`;
+}
+
 async function getMatchResult(matchId) {
   assertConfig();
 
   const id = String(matchId || "").trim();
   if (!id) throw new Error("matchId is required");
 
-  const url = `${BASE_URL}/wager/match/${encodeURIComponent(id)}`;
-  log("backend", "Fetching match result", { matchId: id, url });
+  const normalizedMatchId = id.startsWith("0x") ? bytes32ToUuid(id) : id;
+
+  const url = `${BASE_URL}/wager/match/${encodeURIComponent(normalizedMatchId)}`;
+  log("backend", "Fetching match result", { rawMatchId: id, normalizedMatchId, url });
 
   const res = await fetch(url, { method: "GET", headers: headers() });
   const body = await safeJson(res);
