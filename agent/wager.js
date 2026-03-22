@@ -63,9 +63,9 @@ async function getOpenWagers() {
   const contract = getContract(provider);
 
   const currentBlock = await provider.getBlockNumber();
-  const fromBlock = Math.max(0, currentBlock - 10000);
+  const fromBlock = Math.max(0, currentBlock - 9);
 
-  log("scan", `Scanning WagerCreated events from block ${fromBlock} to ${currentBlock}`);
+  log("scan", "Scanning WagerCreated events from block " + fromBlock + " to " + currentBlock);
 
   const filter = {
     address: process.env.CONTRACT_ADDRESS,
