@@ -1,0 +1,14 @@
+{
+ "name": "planet-agent",
+ "version": "1.0.0",
+ "description": "Autonomous PvP wager escrow agent on Base Mainnet",
+ "main": "agent/index.js",
+ "scripts": {
+ "start": "node agent/index.js",
+ "dev": "MAX_ITERATIONS=5 node agent/index.js"
+ },
+ "dependencies": {
+ "dotenv": "^16.0.0",
+ "ethers": "^6.0.0"
+ }
+}
