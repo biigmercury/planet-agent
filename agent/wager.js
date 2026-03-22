@@ -3,7 +3,7 @@ const { log } = require("./logger");
 
 require("dotenv").config();
 
-const WAGER_CREATED_TOPIC = ethers.id("WagerCreated(uint256,address,uint256,bytes32,bytes32)");
+const WAGER_CREATED_TOPIC = ethers.id("WagerCreated(uint256,bytes32,address,uint256,bytes32)");
 const ZERO_ADDRESS = ethers.ZeroAddress;
 
 function getProvider() {
@@ -83,7 +83,14 @@ async function getOpenWagers() {
     try {
       const parsed = contract.interface.parseLog(eventLog);
       const wagerId = parsed.args[0];
+      const matchId = parsed.args[1];
       const wager = await getWagerDetails(wagerId, contract);
+
+      if (wager) {
+        wager.matchId = matchId.toString();
+        wager.matchIdText = wager.matchId;
+      }
+
       if (isOpen(wager)) openWagers.push(wager);
     } catch (err) {
       log("error", "Failed to parse wager event", { error: err.message });
