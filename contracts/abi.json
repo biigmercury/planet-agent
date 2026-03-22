@@ -1,0 +1,116 @@
+[
+  {
+    "type": "function",
+    "name": "createWager",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "amount", "type": "uint256" },
+      { "name": "gameKey", "type": "bytes32" },
+      { "name": "matchId", "type": "bytes32" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "joinWager",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "wagerId", "type": "uint256" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "cancelWager",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "wagerId", "type": "uint256" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "claimWithAttestation",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "wagerId", "type": "uint256" },
+      { "name": "winner", "type": "address" },
+      { "name": "deadline", "type": "uint256" },
+      { "name": "signature", "type": "bytes" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "claimDraw",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "wagerId", "type": "uint256" },
+      { "name": "deadline", "type": "uint256" },
+      { "name": "signature", "type": "bytes" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "nextWagerId",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "wagers",
+    "stateMutability": "view",
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "outputs": [
+      { "name": "player1", "type": "address" },
+      { "name": "player2", "type": "address" },
+      { "name": "amount", "type": "uint256" },
+      { "name": "gameKey", "type": "bytes32" },
+      { "name": "matchId", "type": "bytes32" },
+      { "name": "claimed", "type": "bool" },
+      { "name": "cancelled", "type": "bool" },
+      { "name": "createdAt", "type": "uint256" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WagerCreated",
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "wagerId", "type": "uint256" },
+      { "indexed": true, "name": "player1", "type": "address" },
+      { "indexed": false, "name": "amount", "type": "uint256" },
+      { "indexed": false, "name": "gameKey", "type": "bytes32" },
+      { "indexed": false, "name": "matchId", "type": "bytes32" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WagerJoined",
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "wagerId", "type": "uint256" },
+      { "indexed": true, "name": "player2", "type": "address" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WagerCancelled",
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "wagerId", "type": "uint256" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WagerSettled",
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "wagerId", "type": "uint256" },
+      { "indexed": true, "name": "winner", "type": "address" },
+      { "indexed": false, "name": "isDraw", "type": "bool" }
+    ]
+  }
+]
