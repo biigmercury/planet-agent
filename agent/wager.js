@@ -7,7 +7,7 @@ const WAGER_CREATED_TOPIC = ethers.id("WagerCreated(uint256,address,uint256,byte
 const ZERO_ADDRESS = ethers.ZeroAddress;
 
 function getProvider() {
-  return new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
+  return new ethers.JsonRpcProvider("https://mainnet.base.org");
 }
 
 function getContract(provider) {
@@ -63,7 +63,7 @@ async function getOpenWagers() {
   const contract = getContract(provider);
 
   const currentBlock = await provider.getBlockNumber();
-  const fromBlock = Math.max(0, currentBlock - 9);
+  const fromBlock = Math.max(0, currentBlock - 2000);
 
   log("scan", "Scanning WagerCreated events from block " + fromBlock + " to " + currentBlock);
 
