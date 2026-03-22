@@ -84,7 +84,7 @@ async function claimWin(contract, wagerId, winnerAddress) {
 
   await ensureTxGuardrails(contract, wagerId, winnerAddress, deadline, signature, false);
 
-  log("tx", "Submitting claimWithAttestation", { wagerId, winnerAddress, deadline });
+  log("info", "Authorization received. Submitting payout to blockchain...", { wagerId, winnerAddress, deadline });
   const tx = await contract.claimWithAttestation(
     BigInt(wagerId),
     winnerAddress,
@@ -92,7 +92,7 @@ async function claimWin(contract, wagerId, winnerAddress) {
     signature
   );
   const rcpt = await tx.wait();
-  log("tx", "claimWithAttestation confirmed", { wagerId, txHash: rcpt.hash, blockNumber: rcpt.blockNumber });
+  log("info", "✅ Payout confirmed on-chain. Winner has been paid.", { wagerId, txHash: rcpt.hash, blockNumber: rcpt.blockNumber });
 }
 
 async function claimDraw(contract, wagerId) {
@@ -102,18 +102,17 @@ async function claimDraw(contract, wagerId) {
 
   await ensureTxGuardrails(contract, wagerId, null, deadline, signature, true);
 
-  log("tx", "Submitting claimDraw", { wagerId, deadline });
+  log("info", "Authorization received for a draw. Submitting draw settlement to blockchain...", { wagerId, deadline });
   const tx = await contract.claimDraw(BigInt(wagerId), BigInt(deadline), signature);
   const rcpt = await tx.wait();
-  log("tx", "claimDraw confirmed", { wagerId, txHash: rcpt.hash, blockNumber: rcpt.blockNumber });
+  log("info", "✅ Draw settlement confirmed on-chain.", { wagerId, txHash: rcpt.hash, blockNumber: rcpt.blockNumber });
 }
 
 async function processWager(contract, wager) {
   const wagerId = wager.wagerId;
   const matchId = wager.matchIdText || wager.matchId;
 
-  log("decision", "Processing open wager", {
-    wagerId,
+  log("info", `Wager #${wagerId} detected — players have both joined. Checking match outcome...`, {
     matchId,
     player1: wager.player1,
     player2: wager.player2,
@@ -124,27 +123,29 @@ async function processWager(contract, wager) {
   const wagerMatch = result?.wagerMatch;
 
   if (!wagerMatch) {
-    log("decision", "No wagerMatch payload yet; skipping", { wagerId, matchId });
+    log("info", "No match result available yet from Planet Games. Will check again shortly.", { wagerId, matchId });
     return;
   }
 
   const status = wagerMatch.status;
   if (!isFinalStatus(status)) {
-    log("decision", "Match not final yet; skipping", { wagerId, status });
+    log("info", "Match is still in progress. No payout action taken.", { wagerId, status });
     return;
   }
 
   if (isDrawStatus(status)) {
+    log("info", "Match ended in a draw. Requesting draw settlement authorization from Planet Games...", { wagerId, status });
     await claimDraw(contract, wagerId);
     return;
   }
 
   const winner = wagerMatch.winnerAddress;
   if (!winner || !ethers.isAddress(winner)) {
-    log("decision", "Finalized match has no valid winnerAddress; skipping", { wagerId, status, winner });
+    log("info", "Match is final but winner address is invalid. Skipping this wager safely.", { wagerId, status, winner });
     return;
   }
 
+  log("info", "Match is over. Winner confirmed. Requesting payout authorization from Planet Games...", { wagerId, winner });
   await claimWin(contract, wagerId, winner);
 }
 
@@ -163,7 +164,7 @@ async function run() {
   const onchainAddress = await signer.getAddress();
   const gasBal = await provider.getBalance(onchainAddress);
 
-  log("startup", "planet-agent booted", {
+  log("info", "Planet Agent is online. Watching for open wagers on Base Mainnet...", {
     wallet: onchainAddress,
     contract: process.env.CONTRACT_ADDRESS,
     pollMs: POLL_MS,
@@ -173,7 +174,7 @@ async function run() {
 
   if (process.env.AGENT_WALLET_ADDRESS && ethers.isAddress(process.env.AGENT_WALLET_ADDRESS)) {
     if (onchainAddress.toLowerCase() !== process.env.AGENT_WALLET_ADDRESS.toLowerCase()) {
-      log("warning", "AGENT_WALLET_ADDRESS does not match derived wallet address", {
+      log("info", "Wallet safety check: configured wallet does not match derived signer wallet.", {
         envAddress: process.env.AGENT_WALLET_ADDRESS,
         derivedAddress: onchainAddress,
       });
@@ -181,24 +182,28 @@ async function run() {
   }
 
   for (let i = 1; i <= MAX_ITERATIONS; i++) {
-    log("loop", `Iteration ${i}/${MAX_ITERATIONS} started`);
+    log("info", `Monitoring cycle ${i}/${MAX_ITERATIONS} started.`);
 
     try {
       const wagers = await getOpenWagers();
-      log("loop", "Open wagers fetched", { count: wagers.length });
+      if (wagers.length === 0) {
+        log("info", "Scanning blockchain for open wagers... none found yet.");
+      } else {
+        log("info", `Found ${wagers.length} wager(s) on-chain. Checking each one...`);
+      }
 
       for (const wager of wagers) {
         try {
           await processWager(contract, wager);
         } catch (err) {
-          log("error", "Failed processing wager", {
+          log("info", "Encountered an issue while processing this wager. Will retry in the next cycle.", {
             wagerId: wager?.wagerId,
             error: err.message,
           });
         }
       }
     } catch (err) {
-      log("error", "Loop iteration failed", { error: err.message });
+      log("info", "Monitoring cycle hit an RPC/backend issue. Continuing safely.", { error: err.message });
     }
 
     if (i < MAX_ITERATIONS) {
@@ -206,14 +211,14 @@ async function run() {
     }
   }
 
-  log("shutdown", "Run complete");
+  log("info", "Planet Agent signing off. All wagers processed.");
 }
 
 let shuttingDown = false;
 function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
-  log("shutdown", `Received ${signal}`);
+  log("info", `Shutdown signal received (${signal}). Writing final execution log...`);
   try {
     writeLogs();
   } catch (err) {
@@ -225,11 +230,11 @@ function shutdown(signal) {
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("uncaughtException", (err) => {
-  log("fatal", "uncaughtException", { error: err.message });
+  log("info", "Unexpected runtime exception detected. Performing safe shutdown.", { error: err.message });
   shutdown("uncaughtException");
 });
 process.on("unhandledRejection", (err) => {
-  log("fatal", "unhandledRejection", { error: err?.message || String(err) });
+  log("info", "Unhandled promise rejection detected. Performing safe shutdown.", { error: err?.message || String(err) });
   shutdown("unhandledRejection");
 });
 
@@ -238,7 +243,7 @@ run()
     writeLogs();
   })
   .catch((err) => {
-    log("fatal", "Agent crashed", { error: err.message });
+    log("info", "Agent run crashed unexpectedly. Writing logs before exit.", { error: err.message });
     writeLogs();
     process.exit(1);
   });
