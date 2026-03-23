@@ -1,7 +1,7 @@
 {
   "name": "planet-agent",
   "version": "1.0.0",
-  "operator_wallet": "0x3086136d55616e39d96da60b4167193fd6c39a42ac924ca3100d8b2d10d0ebf5",
+  "operator_wallet": "0xda0bfee5cde76853de2545129134b03018b37092",
   "erc8004_registration_tx": "https://basescan.org/tx/0x5d60ab841fc2b6614eca9c9c3efd0828a8464ea5e6794eed50abb2477d4b3462",
   "contract_address": "0xb6Ed07efc068A6569e570D6E177693DB62Eb62Bd",
   "network": "base-mainnet",

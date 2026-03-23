@@ -2,128 +2,220 @@
   "agent": "planet-agent",
   "logs": [
     {
-      "timestamp": "2026-03-22T22:28:56.176Z",
+      "timestamp": "2026-03-22T23:05:06.201Z",
       "type": "info",
       "message": "Planet Agent is online. Watching for open wagers on Base Mainnet...",
       "data": {
-        "wallet": "0x24F4b0A0e6FEfEef565EaF199F9B679A5CE6efF7",
-        "balanceWallet": "0x24F4b0A0e6FEfEef565EaF199F9B679A5CE6efF7",
+        "wallet": "0xda0bFeE5cDE76853De2545129134B03018b37092",
+        "balanceWallet": "0xda0bfee5cde76853de2545129134b03018b37092",
         "contract": "0xb6Ed07efc068A6569e570D6E177693DB62Eb62Bd",
         "pollMs": 15000,
-        "maxIterations": 5,
-        "gasBalanceWei": "0"
+        "maxIterations": 10,
+        "gasBalanceWei": "50000000000000"
       }
     },
     {
-      "timestamp": "2026-03-22T22:28:56.177Z",
+      "timestamp": "2026-03-22T23:05:06.203Z",
       "type": "info",
-      "message": "⚠️ Gas balance is zero. Claims cannot be submitted until wallet is funded with ETH for gas.",
-      "data": {
-        "balanceWallet": "0x24F4b0A0e6FEfEef565EaF199F9B679A5CE6efF7"
-      }
+      "message": "Monitoring cycle 1/10 started."
     },
     {
-      "timestamp": "2026-03-22T22:28:56.177Z",
-      "type": "info",
-      "message": "Monitoring cycle 1/5 started."
-    },
-    {
-      "timestamp": "2026-03-22T22:28:56.310Z",
+      "timestamp": "2026-03-22T23:05:06.364Z",
       "type": "scan",
-      "message": "Scanning WagerCreated events from block 43712594 to 43714594"
+      "message": "Scanning WagerCreated events from block 43713679 to 43715679"
     },
     {
-      "timestamp": "2026-03-22T22:28:56.565Z",
+      "timestamp": "2026-03-22T23:05:06.529Z",
       "type": "scan",
-      "message": "Found 2 WagerCreated event(s)"
+      "message": "Found 4 WagerCreated event(s)"
     },
     {
-      "timestamp": "2026-03-22T22:28:56.862Z",
+      "timestamp": "2026-03-22T23:05:07.072Z",
       "type": "info",
       "message": "Scanning blockchain for open wagers... none found yet."
     },
     {
-      "timestamp": "2026-03-22T22:29:11.870Z",
+      "timestamp": "2026-03-22T23:05:22.075Z",
       "type": "info",
-      "message": "Monitoring cycle 2/5 started."
+      "message": "Monitoring cycle 2/10 started."
     },
     {
-      "timestamp": "2026-03-22T22:29:12.008Z",
+      "timestamp": "2026-03-22T23:05:22.206Z",
       "type": "scan",
-      "message": "Scanning WagerCreated events from block 43712602 to 43714602"
+      "message": "Scanning WagerCreated events from block 43713687 to 43715687"
     },
     {
-      "timestamp": "2026-03-22T22:29:12.147Z",
+      "timestamp": "2026-03-22T23:05:22.357Z",
       "type": "scan",
-      "message": "Found 2 WagerCreated event(s)"
+      "message": "Found 4 WagerCreated event(s)"
     },
     {
-      "timestamp": "2026-03-22T22:29:12.389Z",
-      "type": "info",
-      "message": "Scanning blockchain for open wagers... none found yet."
-    },
-    {
-      "timestamp": "2026-03-22T22:29:27.399Z",
-      "type": "info",
-      "message": "Monitoring cycle 3/5 started."
-    },
-    {
-      "timestamp": "2026-03-22T22:29:27.543Z",
-      "type": "scan",
-      "message": "Scanning WagerCreated events from block 43712610 to 43714610"
-    },
-    {
-      "timestamp": "2026-03-22T22:29:27.690Z",
-      "type": "scan",
-      "message": "Found 2 WagerCreated event(s)"
-    },
-    {
-      "timestamp": "2026-03-22T22:29:27.932Z",
+      "timestamp": "2026-03-22T23:05:22.861Z",
       "type": "info",
       "message": "Scanning blockchain for open wagers... none found yet."
     },
     {
-      "timestamp": "2026-03-22T22:29:42.942Z",
+      "timestamp": "2026-03-22T23:05:37.872Z",
       "type": "info",
-      "message": "Monitoring cycle 4/5 started."
+      "message": "Monitoring cycle 3/10 started."
     },
     {
-      "timestamp": "2026-03-22T22:29:43.070Z",
+      "timestamp": "2026-03-22T23:05:37.998Z",
       "type": "scan",
-      "message": "Scanning WagerCreated events from block 43712617 to 43714617"
+      "message": "Scanning WagerCreated events from block 43713695 to 43715695"
     },
     {
-      "timestamp": "2026-03-22T22:29:43.203Z",
+      "timestamp": "2026-03-22T23:05:38.146Z",
       "type": "scan",
-      "message": "Found 2 WagerCreated event(s)"
+      "message": "Found 4 WagerCreated event(s)"
     },
     {
-      "timestamp": "2026-03-22T22:29:43.446Z",
-      "type": "info",
-      "message": "Scanning blockchain for open wagers... none found yet."
-    },
-    {
-      "timestamp": "2026-03-22T22:29:58.457Z",
-      "type": "info",
-      "message": "Monitoring cycle 5/5 started."
-    },
-    {
-      "timestamp": "2026-03-22T22:29:58.667Z",
-      "type": "scan",
-      "message": "Scanning WagerCreated events from block 43712625 to 43714625"
-    },
-    {
-      "timestamp": "2026-03-22T22:29:58.805Z",
-      "type": "scan",
-      "message": "Found 2 WagerCreated event(s)"
-    },
-    {
-      "timestamp": "2026-03-22T22:29:59.049Z",
+      "timestamp": "2026-03-22T23:05:38.620Z",
       "type": "info",
       "message": "Scanning blockchain for open wagers... none found yet."
     },
     {
-      "timestamp": "2026-03-22T22:29:59.049Z",
+      "timestamp": "2026-03-22T23:05:53.631Z",
+      "type": "info",
+      "message": "Monitoring cycle 4/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:05:53.766Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713703 to 43715703"
+    },
+    {
+      "timestamp": "2026-03-22T23:05:53.995Z",
+      "type": "scan",
+      "message": "Found 4 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:05:54.470Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:09.471Z",
+      "type": "info",
+      "message": "Monitoring cycle 5/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:09.601Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713711 to 43715711"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:09.733Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:10.095Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:25.098Z",
+      "type": "info",
+      "message": "Monitoring cycle 6/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:25.223Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713719 to 43715719"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:25.375Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:25.728Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:40.738Z",
+      "type": "info",
+      "message": "Monitoring cycle 7/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:40.879Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713726 to 43715726"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:41.028Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:41.461Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:56.464Z",
+      "type": "info",
+      "message": "Monitoring cycle 8/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:06:56.610Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713734 to 43715734"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:56.751Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:06:57.112Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:07:12.123Z",
+      "type": "info",
+      "message": "Monitoring cycle 9/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:07:12.260Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713742 to 43715742"
+    },
+    {
+      "timestamp": "2026-03-22T23:07:12.404Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:07:12.765Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:07:27.775Z",
+      "type": "info",
+      "message": "Monitoring cycle 10/10 started."
+    },
+    {
+      "timestamp": "2026-03-22T23:07:27.905Z",
+      "type": "scan",
+      "message": "Scanning WagerCreated events from block 43713750 to 43715750"
+    },
+    {
+      "timestamp": "2026-03-22T23:07:28.041Z",
+      "type": "scan",
+      "message": "Found 3 WagerCreated event(s)"
+    },
+    {
+      "timestamp": "2026-03-22T23:07:28.395Z",
+      "type": "info",
+      "message": "Scanning blockchain for open wagers... none found yet."
+    },
+    {
+      "timestamp": "2026-03-22T23:07:28.395Z",
       "type": "info",
       "message": "Planet Agent signing off. All wagers processed."
     }
