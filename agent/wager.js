@@ -29,32 +29,16 @@ async function getWagerDetails(wagerId, contractInstance, eventMeta = {}) {
     const contract = contractInstance || getContract(provider);
     const wager = await contract.wagers(wagerId);
 
-    // Support both named and positional struct outputs
-    const player1 = wager.player1 ?? wager[0];
-    const player2 = wager.player2 ?? wager[1];
-    const amountRaw = wager.amount ?? wager[2];
-    const gameKey = wager.gameKey ?? wager[3];
-    const matchIdOnchain = wager.matchId ?? wager[4];
-    const claimed = wager.claimed ?? wager[5];
-    const cancelled = wager.cancelled ?? wager[6];
-    const createdAt = wager.createdAt ?? wager[7];
-
-    const finalMatchId = eventMeta.matchId || matchIdOnchain;
-
     return {
       wagerId: wagerId.toString(),
-      player1,
-      player2,
-      amount: ethers.formatUnits(amountRaw, 6),
-      amountRaw: amountRaw.toString(),
-      gameKey,
-      gameKeyText: bytes32ToText(gameKey),
-      matchId: finalMatchId,
-      matchIdText: bytes32ToText(finalMatchId),
-      claimed: Boolean(claimed),
-      cancelled: Boolean(cancelled),
-      createdAt: createdAt?.toString?.() || String(createdAt || ""),
-      eventPlayer1: eventMeta.player1,
+      player1: wager[1],
+      player2: wager[2].toString(),
+      amount: ethers.formatUnits(wager[3], 6),
+      amountRaw: wager[3],
+      matchId: wager[4],
+      claimed: wager[5],
+      cancelled: wager[6],
+      createdAt: wager[7]?.toString(),
     };
   } catch (err) {
     log("error", `Failed to read wager ${wagerId}`, { error: err.message });
@@ -63,12 +47,11 @@ async function getWagerDetails(wagerId, contractInstance, eventMeta = {}) {
 }
 
 function isOpen(wager) {
-  if (!wager) return false;
-  if (wager.claimed) return false;
-  if (wager.cancelled) return false;
-  if (!wager.player1 || wager.player1 === ZERO_ADDRESS) return false;
-  if (!wager.player2 || wager.player2 === ZERO_ADDRESS) return false;
-  return true;
+ if (!wager) return false;
+ if (wager[5] === true) return false; // claimed
+ if (wager[6] === true) return false; // cancelled
+ if (!wager[2] || wager[2].toString() === '0') return false; // no player2
+ return true;
 }
 
 async function getOpenWagers() {
